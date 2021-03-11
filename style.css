@@ -1,0 +1,10 @@
+ .deco-\= {
+   color: #111;
+   background-color: #ffddff;
+   padding: 0.1em 0.2em 0.1em 0.2em;
+ }
+ .scrapcalc_result {
+    font-style:italic;
+    font-weight:bold;
+    background-color:yellow;
+ }
