@@ -1,27 +1,27 @@
 function scrapcalc_exec(){
-    for(let expr of document.querySelectorAll('.deco-\\=')){
-	let text = expr.innerText;
+    for(let e of document.querySelectorAll('.deco-\\=')){
+	let text = e.innerText;
 	// 全角カギカッコを配列などで使えるようにする苦しい工夫
-	let decoded = decodeURI(text).replaceAll('［','[').replaceAll('］',']')
+	let expr = decodeURI(text).replaceAll('［','[').replaceAll('］',']')
 	if(text.match(/=/)){
-            (0,eval)(decoded); // 何故かこれでstrictが有効でなくなる?
+            (0,eval)(expr); // 何故かこれでstrictが有効でなくなる?
 	}
 	else {
             let span = document.createElement('span');
             span.classList.add("scrapcalc_result");
-            span.innerText = (0,eval)(decoded);
-            expr.parentNode.appendChild(span)
-            expr.classList.add("scrapcalc_exp")
-            expr.style.display = 'none';
+            span.innerText = (0,eval)(expr);
+            e.parentNode.appendChild(span)
+            e.classList.add("scrapcalc_exp")
+            e.style.display = 'none';
 	}
     }
 }
 function scrapcalc_reset(){
-    for(let expr of document.querySelectorAll('.scrapcalc_result')){
-        expr.remove();
+    for(let e of document.querySelectorAll('.scrapcalc_result')){
+        e.remove();
     }
-    for(let expr of document.querySelectorAll('.scrapcalc_exp')){
-	expr.style.display = 'inline';
+    for(let e of document.querySelectorAll('.scrapcalc_exp')){
+	e.style.display = 'inline';
     }
 }
 document.addEventListener('keypress', e => {
