@@ -6,8 +6,10 @@ function scrapcalc_commands(){
     }
     for(let expr of document.querySelectorAll('.deco-\\=')){
 	let text = expr.innerText;
+	// 全角カギカッコを配列などで使えるようにする
+	let decoded = decodeURI(text).replaceAll('［','[').replaceAll('］',']')
 	if(text.match(/=/)){
-            commands.push(decodeURI(text) + ';');
+            commands.push(decoded + ';');
 	}
 	else {
             let id = `scrapcalc_element_id_${count}`;
@@ -17,7 +19,7 @@ function scrapcalc_commands(){
             expr.parentNode.appendChild(span)
             expr.classList.add("scrapcalc_exp")
             expr.style.display = 'none';
-            commands.push(`document.getElementById("${id}").innerText = ${decodeURI(text)};`);
+            commands.push(`document.getElementById("${id}").innerText = ${decoded};`);
             count += 1;
 	}
     }
