@@ -1,29 +1,20 @@
-function scrapcalc_commands(){
-    const commands = [];
-    let count = 0;
-    for(let expr of document.querySelectorAll('.scrapcalc_result')){
-	expr.remove();
-    }
+function scrapcalc_exec(){
     for(let expr of document.querySelectorAll('.deco-\\=')){
 	let text = expr.innerText;
-	// 全角カギカッコを配列などで使えるようにする
+	// 全角カギカッコを配列などで使えるようにする苦しい工夫
 	let decoded = decodeURI(text).replaceAll('［','[').replaceAll('］',']')
 	if(text.match(/=/)){
-            commands.push(decoded + ';');
+            (0,eval)(decoded); // 何故かこれでstrictが有効でなくなる?
 	}
 	else {
-            let id = `scrapcalc_element_id_${count}`;
-            var span = document.createElement('span');
-            span.id = id;
+            let span = document.createElement('span');
             span.classList.add("scrapcalc_result");
+            span.innerText = (0,eval)(decoded);
             expr.parentNode.appendChild(span)
             expr.classList.add("scrapcalc_exp")
             expr.style.display = 'none';
-            commands.push(`document.getElementById("${id}").innerText = ${decoded};`);
-            count += 1;
 	}
     }
-    return commands.join("\n");
 }
 function scrapcalc_reset(){
     for(let expr of document.querySelectorAll('.scrapcalc_result')){
@@ -34,17 +25,12 @@ function scrapcalc_reset(){
     }
 }
 document.addEventListener('keypress', e => {
-    if (e.key == 'c' && e.ctrlKey){
+    if (e.key == 'c' && e.ctrlKey){ // Ctrl-Cで実行
 	if(document.querySelectorAll('.scrapcalc_result').length == 0){
-            const scrapcalc_func = Function(`(() => {${scrapcalc_commands()}})();`);
-            scrapcalc_func();
+            scrapcalc_exec();
 	}
 	else {
             scrapcalc_reset();
 	}
     }
 })
-// 何かクリックしたら元に戻す場合
-// document.addEventListener('click', e => {
-//   scrapcalc_reset();
-//})
